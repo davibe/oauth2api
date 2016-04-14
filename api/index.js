@@ -49,12 +49,13 @@ passport.use(new LocalStrategy({
   });
 }));
 
+// consumer?
 passport.use('exampleauth', new ExampleStrategy({
-  authorizationURL: 'https://localhost:3000/oauth2/authorize',
-  tokenURL: 'https://localhost:3000/oauth2/token',
+  authorizationURL: 'http://localhost:3000/oauth2/authorize',
+  tokenURL: 'http://localhost:3000/oauth2/token',
   clientID: 'coolclient',
   clientSecret: 'helloworld',
-  callbackURL: 'https://localhost:3000/oauth2/callback'
+  callbackURL: 'http://localhost:3000/oauth2/callback'
 }, function (accessToken, refreshToken, profile, done) {
   store.hgetall('access-token-' + accessToken, function (error, token) {
     if (error) {
@@ -108,11 +109,6 @@ exports.configure = function (app) {
     res.send('<html><body>' + JSON.stringify(req.user) + '</body></html>');
   });
 
-  app.get('/start', function (req, res) {
-    res.send('<a href="https://localhost:3000/oauth2/authorize?response_type=code&client_id=coolclient' +
-      '&scope=somescope&redirect_uri=https://localhost:3000/oauth2/callback">authorize</a>');
-  });
-
   // OAuth 2.0 Server routes
   app.get('/login', function (req, res) {
     res.send('<form action="/login" method="post"><div><label>email:</label><input type="text"' +
@@ -126,6 +122,7 @@ exports.configure = function (app) {
     failureRedirect: '/login'
   }));
 
+  // api called by the client
   app.get('/user', passport.authenticate('bearer', { session: false }), function (req, res) {
     // req.authInfo is set using the `info` argument supplied by
     // `BearerStrategy`.  It is typically used to indicate scope of the token,
@@ -145,6 +142,11 @@ exports.configure = function (app) {
 
 
   // OAuth2 consumer routes
+  app.get('/start', function (req, res) {
+    res.send('<a href="http://localhost:3000/oauth2/authorize?response_type=code&client_id=coolclient' +
+      '&scope=somescope&redirect_uri=http://localhost:3000/oauth2/callback">authorize</a>');
+  });
+
   app.get('/oauth2/callback', passport.authenticate('exampleauth', {
     failureRedirect: '/error'
   }));

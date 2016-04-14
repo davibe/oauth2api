@@ -9,7 +9,7 @@ var
   InternalOAuthError = require('passport-oauth').InternalOAuthError,
   parse = require('./profile').parse,
   pConf = {
-    protocol: 'https',
+    protocol: 'http',
     host: 'localhost:3000',
     profileUrl: '/user'
   };
@@ -35,7 +35,7 @@ var
  *     passport.use(new ExampleStrategy({
  *         clientID: '123-456-789',
  *         clientSecret: 'shhh-its-a-secret'
- *         callbackURL: 'https://www.example.net/auth/example-oauth2orize/callback'
+ *         callbackURL: 'http://www.example.net/auth/example-oauth2orize/callback'
  *       },
  *       function (accessToken, refreshToken, profile, done) {
  *         User.findOrCreate(..., function (err, user) {
